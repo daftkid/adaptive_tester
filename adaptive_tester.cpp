@@ -9,6 +9,8 @@ using namespace adaptive_tester;
 int main(array<System::String ^> ^args)
 {
 	// Enabling Windows XP visual effects before any controls are created
+
+	setlocale(LC_ALL, "Russian");
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false); 
 

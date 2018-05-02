@@ -16,13 +16,11 @@ namespace adaptive_tester {
 	public ref class Login : public System::Windows::Forms::Form
 	{
 
-	public: Form^ main = gcnew Form;
-
 	public:
-		Login(Form^ main)
+		Login(Form^ main_form)
 		{
 			InitializeComponent();
-			this->main = main;
+			this->main = main_form;
 			//
 			//TODO: Add the constructor code here
 			//
@@ -41,6 +39,7 @@ namespace adaptive_tester {
 		}
 	private: System::Windows::Forms::Button^  start_testing;
 	protected: 
+	private: Form ^ main;
 	private: System::Windows::Forms::TextBox^  group;
 	private: System::Windows::Forms::TextBox^  student_name;
 	private: System::Windows::Forms::Label^  label3;
@@ -169,6 +168,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->l_group);
 			this->Controls->Add(this->l_name);
 			this->Name = L"Login";
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Login";
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &Login::Login_FormClosed);
 			this->ResumeLayout(false);
@@ -187,7 +187,7 @@ namespace adaptive_tester {
 	private: System::Void start_testing_Click(System::Object^  sender, System::EventArgs^  e) {
 		if (this->group->Text == "" || this->student_name->Text == "")
 		{
-			MessageBox::Show("Заполните все поля!");
+			MessageBox::Show("Заполните все поля!", "ВНИМАНИЕ!", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 			if (this->student_name->Text == "")
 			{
 				this->student_name->Focus();

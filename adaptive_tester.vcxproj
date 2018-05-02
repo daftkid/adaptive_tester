@@ -94,6 +94,7 @@
     <ClCompile Include="adaptive_tester.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Login.cpp" />
+    <ClCompile Include="LoginAdmin.cpp" />
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="StartForm.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -103,6 +104,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Login.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="LoginAdmin.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="resource.h" />
@@ -120,6 +124,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoginAdmin.resx">
+      <DependentUpon>LoginAdmin.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Result.resx">
       <DependentUpon>Result.h</DependentUpon>

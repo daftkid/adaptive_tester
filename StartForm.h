@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Login.h"
+#include "LoginAdmin.h"
 
 namespace adaptive_tester {
 
@@ -197,6 +198,7 @@ namespace adaptive_tester {
 			this->MainMenuStrip = this->menuStrip1;
 			this->MaximizeBox = false;
 			this->Name = L"StartForm";
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Adaptive tester";
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
@@ -211,11 +213,14 @@ namespace adaptive_tester {
 		this->Close();
 	}
 	private: System::Void btnCreateTest_Click(System::Object^  sender, System::EventArgs^  e) {
-			 }
+		Form^ loginAdmin = gcnew LoginAdmin(this);
+		loginAdmin->Show();
+		this->Hide();
+		}
 	private: System::Void btnRunTest_Click(System::Object^  sender, System::EventArgs^  e) {
-					Form^ loginForm = gcnew Login(this);
-					loginForm->Show();
-					this->Hide();
-			 }
+		Form^ loginForm = gcnew Login(this);
+		loginForm->Show();
+		this->Hide();
+	}
 };
 }
