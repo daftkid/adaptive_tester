@@ -86,7 +86,7 @@ namespace adaptive_tester {
 			this->btnExit->Location = System::Drawing::Point(35, 146);
 			this->btnExit->Name = L"btnExit";
 			this->btnExit->Size = System::Drawing::Size(215, 31);
-			this->btnExit->TabIndex = 5;
+			this->btnExit->TabIndex = 2;
 			this->btnExit->Text = L"Выйти";
 			this->btnExit->UseVisualStyleBackColor = true;
 			this->btnExit->Click += gcnew System::EventHandler(this, &StartForm::btnExit_Click);
@@ -96,7 +96,7 @@ namespace adaptive_tester {
 			this->btnRunTest->Location = System::Drawing::Point(35, 85);
 			this->btnRunTest->Name = L"btnRunTest";
 			this->btnRunTest->Size = System::Drawing::Size(215, 45);
-			this->btnRunTest->TabIndex = 4;
+			this->btnRunTest->TabIndex = 1;
 			this->btnRunTest->Text = L"Пройти тест";
 			this->btnRunTest->UseVisualStyleBackColor = true;
 			this->btnRunTest->Click += gcnew System::EventHandler(this, &StartForm::btnRunTest_Click);
@@ -106,7 +106,7 @@ namespace adaptive_tester {
 			this->btnCreateTest->Location = System::Drawing::Point(35, 34);
 			this->btnCreateTest->Name = L"btnCreateTest";
 			this->btnCreateTest->Size = System::Drawing::Size(215, 45);
-			this->btnCreateTest->TabIndex = 3;
+			this->btnCreateTest->TabIndex = 0;
 			this->btnCreateTest->Text = L"Создать тест";
 			this->btnCreateTest->UseVisualStyleBackColor = true;
 			this->btnCreateTest->Click += gcnew System::EventHandler(this, &StartForm::btnCreateTest_Click);
@@ -120,7 +120,8 @@ namespace adaptive_tester {
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
 			this->menuStrip1->Size = System::Drawing::Size(284, 24);
-			this->menuStrip1->TabIndex = 6;
+			this->menuStrip1->TabIndex = 3;
+			this->menuStrip1->TabStop = true;
 			this->menuStrip1->Text = L"menuStrip1";
 			// 
 			// creaet_test_ToolStripMenuItem
@@ -136,31 +137,31 @@ namespace adaptive_tester {
 			// createtestToolStripMenuItem
 			// 
 			this->createtestToolStripMenuItem->Name = L"createtestToolStripMenuItem";
-			this->createtestToolStripMenuItem->Size = System::Drawing::Size(142, 22);
+			this->createtestToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->createtestToolStripMenuItem->Text = L"Создать тест";
 			this->createtestToolStripMenuItem->Click += gcnew System::EventHandler(this, &StartForm::btnCreateTest_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this->toolStripMenuItem1->Name = L"toolStripMenuItem1";
-			this->toolStripMenuItem1->Size = System::Drawing::Size(139, 6);
+			this->toolStripMenuItem1->Size = System::Drawing::Size(177, 6);
 			// 
 			// start_test_ToolStripMenuItem
 			// 
 			this->start_test_ToolStripMenuItem->Name = L"start_test_ToolStripMenuItem";
-			this->start_test_ToolStripMenuItem->Size = System::Drawing::Size(142, 22);
+			this->start_test_ToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->start_test_ToolStripMenuItem->Text = L"Пройти тест";
 			this->start_test_ToolStripMenuItem->Click += gcnew System::EventHandler(this, &StartForm::btnRunTest_Click);
 			// 
 			// toolStripMenuItem2
 			// 
 			this->toolStripMenuItem2->Name = L"toolStripMenuItem2";
-			this->toolStripMenuItem2->Size = System::Drawing::Size(139, 6);
+			this->toolStripMenuItem2->Size = System::Drawing::Size(177, 6);
 			// 
 			// exit_ToolStripMenuItem
 			// 
 			this->exit_ToolStripMenuItem->Name = L"exit_ToolStripMenuItem";
-			this->exit_ToolStripMenuItem->Size = System::Drawing::Size(142, 22);
+			this->exit_ToolStripMenuItem->Size = System::Drawing::Size(180, 22);
 			this->exit_ToolStripMenuItem->Text = L"Выйти";
 			this->exit_ToolStripMenuItem->Click += gcnew System::EventHandler(this, &StartForm::btnExit_Click);
 			// 

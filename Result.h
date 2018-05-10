@@ -12,12 +12,17 @@ namespace adaptive_tester {
 	/// <summary>
 	/// Summary for Result
 	/// </summary>
+
 	public ref class Result : public System::Windows::Forms::Form
 	{
+	private: Form ^ parent;
 	public:
-		Result(void)
+		Result(Form^ parent, String^ name, int score)
 		{
 			InitializeComponent();
+			this->l_test_name->Text = name;
+			this->l_test_score->Text = score.ToString();
+			this->parent = parent;
 			//
 			//TODO: Add the constructor code here
 			//
@@ -34,11 +39,15 @@ namespace adaptive_tester {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Label^  label4;
+	private: System::Windows::Forms::Label^  l_test_name;
+	protected:
+
 	protected: 
 	private: System::Windows::Forms::Label^  label3;
-	private: System::Windows::Forms::Label^  label2;
+	private: System::Windows::Forms::Label^  l_test_score;
+
 	private: System::Windows::Forms::Label^  label1;
+	private: System::Windows::Forms::Button^  btn_close;
 
 	private:
 		/// <summary>
@@ -53,20 +62,21 @@ namespace adaptive_tester {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->label4 = (gcnew System::Windows::Forms::Label());
+			this->l_test_name = (gcnew System::Windows::Forms::Label());
 			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->l_test_score = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->btn_close = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
-			// label4
+			// l_test_name
 			// 
-			this->label4->AutoSize = true;
-			this->label4->Location = System::Drawing::Point(158, 36);
-			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(91, 13);
-			this->label4->TabIndex = 7;
-			this->label4->Text = L"[название темы]";
+			this->l_test_name->AutoSize = true;
+			this->l_test_name->Location = System::Drawing::Point(158, 36);
+			this->l_test_name->Name = L"l_test_name";
+			this->l_test_name->Size = System::Drawing::Size(91, 13);
+			this->l_test_name->TabIndex = 7;
+			this->l_test_name->Text = L"[название темы]";
 			// 
 			// label3
 			// 
@@ -77,14 +87,14 @@ namespace adaptive_tester {
 			this->label3->TabIndex = 6;
 			this->label3->Text = L"Вы прошли тест по теме";
 			// 
-			// label2
+			// l_test_score
 			// 
-			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(162, 72);
-			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(42, 13);
-			this->label2->TabIndex = 5;
-			this->label2->Text = L"95/100";
+			this->l_test_score->AutoSize = true;
+			this->l_test_score->Location = System::Drawing::Point(162, 72);
+			this->l_test_score->Name = L"l_test_score";
+			this->l_test_score->Size = System::Drawing::Size(42, 13);
+			this->l_test_score->TabIndex = 5;
+			this->l_test_score->Text = L"95/100";
 			// 
 			// label1
 			// 
@@ -95,14 +105,25 @@ namespace adaptive_tester {
 			this->label1->TabIndex = 4;
 			this->label1->Text = L"Ваш результат:";
 			// 
+			// btn_close
+			// 
+			this->btn_close->Location = System::Drawing::Point(81, 106);
+			this->btn_close->Name = L"btn_close";
+			this->btn_close->Size = System::Drawing::Size(123, 23);
+			this->btn_close->TabIndex = 8;
+			this->btn_close->Text = L"Закрыть";
+			this->btn_close->UseVisualStyleBackColor = true;
+			this->btn_close->Click += gcnew System::EventHandler(this, &Result::btn_close_Click);
+			// 
 			// Result
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(284, 127);
-			this->Controls->Add(this->label4);
+			this->ClientSize = System::Drawing::Size(284, 141);
+			this->Controls->Add(this->btn_close);
+			this->Controls->Add(this->l_test_name);
 			this->Controls->Add(this->label3);
-			this->Controls->Add(this->label2);
+			this->Controls->Add(this->l_test_score);
 			this->Controls->Add(this->label1);
 			this->Name = L"Result";
 			this->Text = L"Result";
@@ -111,5 +132,10 @@ namespace adaptive_tester {
 
 		}
 #pragma endregion
-	};
+	private: System::Void btn_close_Click(System::Object^  sender, System::EventArgs^  e) {
+		this->Hide();
+		this->parent->Show();
+		this->Close();
+	}
+};
 }

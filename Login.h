@@ -1,4 +1,5 @@
 #pragma once
+#include "Test.h"
 
 
 namespace adaptive_tester {
@@ -16,14 +17,21 @@ namespace adaptive_tester {
 	public ref class Login : public System::Windows::Forms::Form
 	{
 
+	private: System::Collections::Generic::Dictionary<String^, String^> dict;
 	public:
 		Login(Form^ main_form)
 		{
 			InitializeComponent();
 			this->main = main_form;
-			//
-			//TODO: Add the constructor code here
-			//
+
+			dict["test"] = "C:\\Users\\daft_kiD\\Desktop\\test.adt";
+			dict["sample"] = "C:\\Users\\daft_kiD\\Desktop\\sample.adt";
+
+			for each(String^ key in dict.Keys)
+			{
+				this->comboBox1->Items->Add(key);
+			}
+			this->comboBox1->Text = this->comboBox1->Items[0]->ToString();
 		}
 
 	protected:
@@ -81,7 +89,7 @@ namespace adaptive_tester {
 			this->start_testing->Location = System::Drawing::Point(16, 116);
 			this->start_testing->Name = L"start_testing";
 			this->start_testing->Size = System::Drawing::Size(256, 47);
-			this->start_testing->TabIndex = 11;
+			this->start_testing->TabIndex = 3;
 			this->start_testing->Text = L"Начать тест";
 			this->start_testing->UseVisualStyleBackColor = true;
 			this->start_testing->Click += gcnew System::EventHandler(this, &Login::start_testing_Click);
@@ -91,14 +99,14 @@ namespace adaptive_tester {
 			this->group->Location = System::Drawing::Point(129, 48);
 			this->group->Name = L"group";
 			this->group->Size = System::Drawing::Size(143, 20);
-			this->group->TabIndex = 10;
+			this->group->TabIndex = 1;
 			// 
 			// student_name
 			// 
 			this->student_name->Location = System::Drawing::Point(129, 22);
 			this->student_name->Name = L"student_name";
 			this->student_name->Size = System::Drawing::Size(143, 20);
-			this->student_name->TabIndex = 9;
+			this->student_name->TabIndex = 0;
 			// 
 			// label3
 			// 
@@ -131,7 +139,7 @@ namespace adaptive_tester {
 			this->back_to_start->Location = System::Drawing::Point(16, 172);
 			this->back_to_start->Name = L"back_to_start";
 			this->back_to_start->Size = System::Drawing::Size(256, 31);
-			this->back_to_start->TabIndex = 12;
+			this->back_to_start->TabIndex = 4;
 			this->back_to_start->Text = L"Вернуться";
 			this->back_to_start->UseVisualStyleBackColor = true;
 			this->back_to_start->Click += gcnew System::EventHandler(this, &Login::back_to_start_Click);
@@ -142,7 +150,7 @@ namespace adaptive_tester {
 			this->comboBox1->Location = System::Drawing::Point(129, 74);
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(143, 21);
-			this->comboBox1->TabIndex = 13;
+			this->comboBox1->TabIndex = 2;
 			// 
 			// label1
 			// 
@@ -197,6 +205,12 @@ namespace adaptive_tester {
 				this->group->Focus();
 			}
 			return;
+		}
+		else
+		{
+			Form^ test = gcnew Test(this, this->comboBox1->Text, dict[this->comboBox1->Text]);
+			this->Hide();
+			test->Show();
 		}
 	}
 };

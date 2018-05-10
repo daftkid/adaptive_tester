@@ -3,4 +3,6 @@
 // are changed infrequently
 #pragma once
 
+#include <Windows.h>
+
 // TODO: reference additional headers your program requires here

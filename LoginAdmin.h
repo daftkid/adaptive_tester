@@ -6,6 +6,7 @@ using namespace System::Security::Cryptography;
 #include <tchar.h>
 
 #include <locale.h>
+#include "ChooseTest.h"
 
 namespace adaptive_tester {
 
@@ -29,6 +30,7 @@ namespace adaptive_tester {
 		{
 			InitializeComponent();
 			this->main = main_form;
+			this->tb_password->Focus();
 			//
 			//TODO: Add the constructor code here
 			//
@@ -113,7 +115,7 @@ namespace adaptive_tester {
 			this->rb_enter_password->Location = System::Drawing::Point(15, 13);
 			this->rb_enter_password->Name = L"rb_enter_password";
 			this->rb_enter_password->Size = System::Drawing::Size(100, 17);
-			this->rb_enter_password->TabIndex = 2;
+			this->rb_enter_password->TabIndex = 0;
 			this->rb_enter_password->TabStop = true;
 			this->rb_enter_password->Text = L"Ввести пароль";
 			this->rb_enter_password->UseVisualStyleBackColor = true;
@@ -125,7 +127,8 @@ namespace adaptive_tester {
 			this->rb_change_password->Location = System::Drawing::Point(15, 79);
 			this->rb_change_password->Name = L"rb_change_password";
 			this->rb_change_password->Size = System::Drawing::Size(115, 17);
-			this->rb_change_password->TabIndex = 3;
+			this->rb_change_password->TabIndex = 2;
+			this->rb_change_password->TabStop = true;
 			this->rb_change_password->Text = L"Изменить пароль";
 			this->rb_change_password->UseVisualStyleBackColor = true;
 			this->rb_change_password->CheckedChanged += gcnew System::EventHandler(this, &LoginAdmin::rb_change_password_CheckedChanged);
@@ -137,7 +140,7 @@ namespace adaptive_tester {
 			this->tb_old_password->Name = L"tb_old_password";
 			this->tb_old_password->PasswordChar = '*';
 			this->tb_old_password->Size = System::Drawing::Size(164, 20);
-			this->tb_old_password->TabIndex = 5;
+			this->tb_old_password->TabIndex = 3;
 			this->tb_old_password->TextChanged += gcnew System::EventHandler(this, &LoginAdmin::tb_old_password_TextChanged);
 			// 
 			// label2
@@ -156,7 +159,7 @@ namespace adaptive_tester {
 			this->tb_new_password->Name = L"tb_new_password";
 			this->tb_new_password->PasswordChar = '*';
 			this->tb_new_password->Size = System::Drawing::Size(164, 20);
-			this->tb_new_password->TabIndex = 7;
+			this->tb_new_password->TabIndex = 4;
 			// 
 			// label3
 			// 
@@ -172,7 +175,7 @@ namespace adaptive_tester {
 			this->back_to_start->Location = System::Drawing::Point(22, 219);
 			this->back_to_start->Name = L"back_to_start";
 			this->back_to_start->Size = System::Drawing::Size(256, 31);
-			this->back_to_start->TabIndex = 14;
+			this->back_to_start->TabIndex = 6;
 			this->back_to_start->Text = L"Вернуться";
 			this->back_to_start->UseVisualStyleBackColor = true;
 			this->back_to_start->Click += gcnew System::EventHandler(this, &LoginAdmin::back_to_start_Click);
@@ -183,7 +186,7 @@ namespace adaptive_tester {
 			this->btn_go->Location = System::Drawing::Point(22, 163);
 			this->btn_go->Name = L"btn_go";
 			this->btn_go->Size = System::Drawing::Size(256, 47);
-			this->btn_go->TabIndex = 13;
+			this->btn_go->TabIndex = 5;
 			this->btn_go->Text = L"Продолжить";
 			this->btn_go->UseVisualStyleBackColor = true;
 			this->btn_go->Click += gcnew System::EventHandler(this, &LoginAdmin::btn_go_Click);
@@ -271,31 +274,9 @@ namespace adaptive_tester {
 			}
 		}
 
-		String^ fileName = "textfile.txt";
-		try
-		{
-			StreamReader^ din = File::OpenText(fileName);
-			String^ delimiter_str = "|";
-			array<Char>^ delimiter = delimiter_str->ToCharArray();
-			array<String^>^ words;
-
-
-			String^ str;
-			int count = 0;
-			while ((str = din->ReadLine()) != nullptr)
-			{
-				words = str->Split(delimiter);
-				for (int word = 0; word < words->Length; word++)
-				{
-					MessageBox::Show((words[word]));
-				}
-			
-			}
-		}
-		catch (Exception^ e)
-		{
-			MessageBox::Show(e->Message);
-		}
+		Form^ chooseTest = gcnew ChooseTest();
+		chooseTest->Show();
+		this->Close();
 	}
 	private: System::Void LoginAdmin_Load(System::Object^  sender, System::EventArgs^  e) {
 	}
@@ -305,6 +286,8 @@ namespace adaptive_tester {
 		if (in_password != this->password)
 		{
 			MessageBox::Show("Пароль неверный! Повторите ввод пароля");
+			this->tb_password->Clear();
+			this->tb_password->Focus();
 			return false;
 		}
 		else
