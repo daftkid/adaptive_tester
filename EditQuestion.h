@@ -301,6 +301,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->l_coef);
 			this->Controls->Add(this->answers_gb);
 			this->Controls->Add(this->quest_gb);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Name = L"EditQuestion";
 			this->Text = L"Редактирование вопроса";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &EditQuestion::EditQuestion_FormClosing);

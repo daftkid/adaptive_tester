@@ -235,6 +235,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->btn_submit);
 			this->Controls->Add(this->gb_answers);
 			this->Controls->Add(this->quest_gb);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Name = L"Test";
 			this->Text = L"Test";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &Test::Test_FormClosing);
@@ -273,8 +274,6 @@ namespace adaptive_tester {
 			return;
 		}
 
-
-
 		switch (quest_list[this->current_quest].correct_answer)
 		{
 		case 0:
@@ -291,12 +290,14 @@ namespace adaptive_tester {
 			break;
 		}
 
-		MessageBox::Show(this->quest_list[this->current_quest].correct_answer.ToString() + " " + this->score.ToString());
-
 		if (++current_quest < quest_list->Count)
 		{
 			show_question(current_quest);
 		}	
+		else
+		{
+			this->Close();
+		}
 	}
 	private: System::Void btn_finish_Click(System::Object^  sender, System::EventArgs^  e) {
 		if (MessageBox::Show("Вы уверены, что хотите закончить тест?", "Внимание!", MessageBoxButtons::OKCancel) == System::Windows::Forms::DialogResult::OK)

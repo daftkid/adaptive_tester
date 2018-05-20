@@ -125,6 +125,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->l_test_score);
 			this->Controls->Add(this->label1);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Name = L"Result";
 			this->Text = L"Result";
 			this->ResumeLayout(false);

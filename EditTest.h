@@ -243,6 +243,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->btn_edit);
 			this->Controls->Add(this->l_text_list);
 			this->Controls->Add(this->dgv_list);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Name = L"EditTest";
 			this->Text = L"EditTest";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv_list))->EndInit();

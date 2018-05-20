@@ -206,6 +206,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->rb_enter_password);
 			this->Controls->Add(this->tb_password);
 			this->Controls->Add(this->label1);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Name = L"LoginAdmin";
 			this->Text = L"Пароль для перподавателя";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &LoginAdmin::LoginAdmin_FormClosing);
@@ -275,8 +276,10 @@ namespace adaptive_tester {
 		}
 
 		Form^ chooseTest = gcnew ChooseTest();
-		chooseTest->Show();
-		this->Close();
+		this->Hide();
+		chooseTest->ShowDialog();
+		this->Show();
+
 	}
 	private: System::Void LoginAdmin_Load(System::Object^  sender, System::EventArgs^  e) {
 	}

@@ -175,6 +175,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->l_group);
 			this->Controls->Add(this->l_name);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Name = L"Login";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Login";

@@ -137,31 +137,31 @@ namespace adaptive_tester {
 			// createtestToolStripMenuItem
 			// 
 			this->createtestToolStripMenuItem->Name = L"createtestToolStripMenuItem";
-			this->createtestToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->createtestToolStripMenuItem->Size = System::Drawing::Size(142, 22);
 			this->createtestToolStripMenuItem->Text = L"Создать тест";
 			this->createtestToolStripMenuItem->Click += gcnew System::EventHandler(this, &StartForm::btnCreateTest_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this->toolStripMenuItem1->Name = L"toolStripMenuItem1";
-			this->toolStripMenuItem1->Size = System::Drawing::Size(177, 6);
+			this->toolStripMenuItem1->Size = System::Drawing::Size(139, 6);
 			// 
 			// start_test_ToolStripMenuItem
 			// 
 			this->start_test_ToolStripMenuItem->Name = L"start_test_ToolStripMenuItem";
-			this->start_test_ToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->start_test_ToolStripMenuItem->Size = System::Drawing::Size(142, 22);
 			this->start_test_ToolStripMenuItem->Text = L"Пройти тест";
 			this->start_test_ToolStripMenuItem->Click += gcnew System::EventHandler(this, &StartForm::btnRunTest_Click);
 			// 
 			// toolStripMenuItem2
 			// 
 			this->toolStripMenuItem2->Name = L"toolStripMenuItem2";
-			this->toolStripMenuItem2->Size = System::Drawing::Size(177, 6);
+			this->toolStripMenuItem2->Size = System::Drawing::Size(139, 6);
 			// 
 			// exit_ToolStripMenuItem
 			// 
 			this->exit_ToolStripMenuItem->Name = L"exit_ToolStripMenuItem";
-			this->exit_ToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->exit_ToolStripMenuItem->Size = System::Drawing::Size(142, 22);
 			this->exit_ToolStripMenuItem->Text = L"Выйти";
 			this->exit_ToolStripMenuItem->Click += gcnew System::EventHandler(this, &StartForm::btnExit_Click);
 			// 
@@ -196,6 +196,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->btnRunTest);
 			this->Controls->Add(this->btnCreateTest);
 			this->Controls->Add(this->menuStrip1);
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->MainMenuStrip = this->menuStrip1;
 			this->MaximizeBox = false;
 			this->Name = L"StartForm";
