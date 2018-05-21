@@ -7,6 +7,7 @@ using namespace System::Security::Cryptography;
 
 #include <locale.h>
 #include "ChooseTest.h"
+#include "QuestStruct.h"
 
 namespace adaptive_tester {
 
@@ -23,17 +24,14 @@ namespace adaptive_tester {
 	public ref class LoginAdmin : public System::Windows::Forms::Form
 	{
 
-
-
 	public:
-		LoginAdmin(Form^ main_form)
+		LoginAdmin(Form^ main_form, GlobalVars^ gv)
 		{
 			InitializeComponent();
 			this->main = main_form;
 			this->tb_password->Focus();
-			//
-			//TODO: Add the constructor code here
-			//
+			this->gv = gv;
+			this->password = this->gv->password;
 		}
 
 	protected:
@@ -67,8 +65,8 @@ namespace adaptive_tester {
 		/// Required designer variable.
 		/// </summary>
 		System::ComponentModel::Container ^components;
-
-		String^ password = "test";
+		String^ password;
+		GlobalVars^ gv;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -272,10 +270,11 @@ namespace adaptive_tester {
 			{
 				if (!checkPassword(this->tb_old_password->Text)) return;
 				this->password = tb_new_password->Text;
+				gv->password = tb_new_password->Text;
 			}
 		}
 
-		Form^ chooseTest = gcnew ChooseTest();
+		Form^ chooseTest = gcnew ChooseTest(gv);
 		this->Hide();
 		chooseTest->ShowDialog();
 		this->Show();

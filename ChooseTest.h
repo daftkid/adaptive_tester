@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EditTest.h"
+#include "QuestStruct.h"
 
 using namespace System;
 using namespace System::IO;
@@ -20,11 +21,16 @@ namespace adaptive_tester {
 	public ref class ChooseTest : public System::Windows::Forms::Form
 	{
 	public:
-		ChooseTest(void)
+		ChooseTest(GlobalVars^ gv_i)
 		{
 			InitializeComponent();
 
-			this->dgv_test_list->Rows->Add("test", "C:\\Users\\daft_kiD\\Desktop\\test.adt");
+			this->gv = gv_i;
+
+			for (int i = 0; i < gv->test_list->Count; i++)
+			{
+				this->dgv_test_list->Rows->Add(gv->test_list[i].test_name, gv->test_list[i].test_path);
+			}			
 		}
 
 	protected:
@@ -39,6 +45,7 @@ namespace adaptive_tester {
 			}
 		}
 	private: System::Windows::Forms::DataGridView^  dgv_test_list;
+	private: GlobalVars^ gv;
 	protected:
 
 	protected:
@@ -60,6 +67,7 @@ namespace adaptive_tester {
 	private: System::Windows::Forms::Button^  btn_delete_test;
 	private: System::Windows::Forms::OpenFileDialog^  openTestDlg;
 	private: System::Windows::Forms::Button^  back_to_start;
+	private: System::Windows::Forms::Button^  btn_new_test;
 
 	private:
 		/// <summary>
@@ -79,6 +87,7 @@ namespace adaptive_tester {
 			this->TestPath = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->l_text_list = (gcnew System::Windows::Forms::Label());
 			this->gb_add_test = (gcnew System::Windows::Forms::GroupBox());
+			this->btn_new_test = (gcnew System::Windows::Forms::Button());
 			this->btn_add_test = (gcnew System::Windows::Forms::Button());
 			this->btn_clear_test = (gcnew System::Windows::Forms::Button());
 			this->btn_browse_test = (gcnew System::Windows::Forms::Button());
@@ -140,6 +149,7 @@ namespace adaptive_tester {
 			// 
 			// gb_add_test
 			// 
+			this->gb_add_test->Controls->Add(this->btn_new_test);
 			this->gb_add_test->Controls->Add(this->btn_add_test);
 			this->gb_add_test->Controls->Add(this->btn_clear_test);
 			this->gb_add_test->Controls->Add(this->btn_browse_test);
@@ -153,6 +163,17 @@ namespace adaptive_tester {
 			this->gb_add_test->TabIndex = 2;
 			this->gb_add_test->TabStop = false;
 			this->gb_add_test->Text = L"Добавить тест:   ";
+			// 
+			// btn_new_test
+			// 
+			this->btn_new_test->Enabled = false;
+			this->btn_new_test->Location = System::Drawing::Point(166, 78);
+			this->btn_new_test->Name = L"btn_new_test";
+			this->btn_new_test->Size = System::Drawing::Size(75, 23);
+			this->btn_new_test->TabIndex = 6;
+			this->btn_new_test->Text = L"Новый тест";
+			this->btn_new_test->UseVisualStyleBackColor = true;
+			this->btn_new_test->Click += gcnew System::EventHandler(this, &ChooseTest::btn_new_test_Click);
 			// 
 			// btn_add_test
 			// 
@@ -280,6 +301,7 @@ namespace adaptive_tester {
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Name = L"ChooseTest";
 			this->Text = L"ChooseTest";
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &ChooseTest::ChooseTest_FormClosing);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv_test_list))->EndInit();
 			this->gb_add_test->ResumeLayout(false);
 			this->gb_add_test->PerformLayout();
@@ -304,12 +326,14 @@ namespace adaptive_tester {
 			this->btn_add_test->Enabled = true;
 			this->btn_clear_test->Enabled = true;
 			this->btn_browse_test->Enabled = true;
+			this->btn_new_test->Enabled = true;
 		}
 		else
 		{
 			this->btn_add_test->Enabled = false;
 			this->btn_clear_test->Enabled = false;
 			this->btn_browse_test->Enabled = false;
+			this->btn_new_test->Enabled = false;
 		}
 	}
 	private: System::Void btn_browse_test_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -374,8 +398,25 @@ namespace adaptive_tester {
 		String^ test_name = this->dgv_test_list->CurrentRow->Cells["TestName"]->Value->ToString();
 		String^ test_path = this->dgv_test_list->CurrentRow->Cells["TestPath"]->Value->ToString();
 
-		Form^ editForm = gcnew EditTest(test_name, test_path);
+		Form^ editForm = gcnew EditTest(test_name, test_path, false);
 		editForm->Show();
+	}
+private: System::Void btn_new_test_Click(System::Object^  sender, System::EventArgs^  e) {
+	Form^ editForm = gcnew EditTest(tb_title->Text, "", true);
+	editForm->Show();
+}
+	private: System::Void ChooseTest_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
+		gv->test_list->Clear();
+
+		for (int row = 0; row < dgv_test_list->Rows->Count - 1; row++)
+		{
+			TestList tl;
+
+			tl.test_name = dgv_test_list->Rows[row]->Cells["TestName"]->Value->ToString();
+			tl.test_path = dgv_test_list->Rows[row]->Cells["TestPath"]->Value->ToString();
+
+			gv->test_list->Add(tl);
+		}
 	}
 };
 }

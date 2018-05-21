@@ -26,21 +26,27 @@ namespace adaptive_tester {
 	private: String ^ path;
 	public: Generic::List<QuestStruct>^ quest_list = gcnew  Generic::List<QuestStruct>();
 	public:
-		EditTest(String^ test_name, String^ test_path)
+		EditTest(String^ test_name, String^ test_path, bool is_new)
 		{
 			InitializeComponent();
 			this->path = test_path;
-			
-			StreamReader^ din = File::OpenText(this->path);
-			String^ delimiter_str = "|";
-			array<Char>^ delimiter = delimiter_str->ToCharArray();
-			array<String^>^ words;
-			
-			String^ str;
-			int count = 0;
-			while ((str = din->ReadLine()) != nullptr)
+
+			if (is_new)
 			{
-				words = str->Split(delimiter);
+				btn_save_test->Enabled = false;
+			}
+			else
+			{
+				StreamReader^ din = File::OpenText(this->path);
+				String^ delimiter_str = "|";
+				array<Char>^ delimiter = delimiter_str->ToCharArray();
+				array<String^>^ words;
+
+				String^ str;
+				int count = 0;
+				while ((str = din->ReadLine()) != nullptr)
+				{
+					words = str->Split(delimiter);
 
 					QuestStruct question;
 					question.question = words[0];
@@ -67,15 +73,16 @@ namespace adaptive_tester {
 					question.fourth_answer = words[5];
 
 					quest_list->Add(question);
-			}
+				}
 
-			din->Close();
+				din->Close();
 
-			for (int i = 0; i <= quest_list->Count - 1; i++)
-			{
-				QuestStruct quest = quest_list[i];
+				for (int i = 0; i <= quest_list->Count - 1; i++)
+				{
+					QuestStruct quest = quest_list[i];
 
-				this->dgv_list->Rows->Add(quest.coefficient, quest.question);
+					this->dgv_list->Rows->Add(quest.coefficient, quest.question);
+				}
 			}
 		}
 
@@ -253,11 +260,19 @@ namespace adaptive_tester {
 		}
 #pragma endregion
 	private: System::Void btn_edit_Click(System::Object^  sender, System::EventArgs^  e) {
-		EditQuestion^ editQuest = gcnew EditQuestion(quest_list[this->dgv_list->CurrentRow->Index]);
-		editQuest->ShowDialog();
+		if (dgv_list->RowCount > 1)
+		{
+			EditQuestion^ editQuest = gcnew EditQuestion(quest_list[this->dgv_list->CurrentRow->Index]);
+			editQuest->ShowDialog();
 
-		quest_list[this->dgv_list->CurrentRow->Index] = editQuest->question;
-		refresh_test();
+			quest_list[this->dgv_list->CurrentRow->Index] = editQuest->question;
+			refresh_test();
+		}
+		else
+		{
+			MessageBox::Show("Any questions yet! Please add new!");
+		}
+
 	}
 	private: System::Void btn_close_Click(System::Object^  sender, System::EventArgs^  e) {
 		this->Close();
@@ -276,9 +291,17 @@ namespace adaptive_tester {
 		this->dgv_list->CommitEdit(DataGridViewDataErrorContexts::Commit);
 	}
 	private: System::Void btn_delete_Click(System::Object^  sender, System::EventArgs^  e) {
-		quest_list->RemoveAt(dgv_list->CurrentRow->Index);
-		refresh_test();
-		this->dgv_list->CurrentCell = this->dgv_list->Rows[this->dgv_list->Rows->Count - 2]->Cells[0];
+		if (dgv_list->RowCount > 1)
+		{
+			quest_list->RemoveAt(dgv_list->CurrentRow->Index);
+			refresh_test();
+			this->dgv_list->CurrentCell = this->dgv_list->Rows[this->dgv_list->Rows->Count - 2]->Cells[0];
+		}
+		else
+		{
+			MessageBox::Show("Any questions yet! Please add new!");
+		}
+
 	}
 	private: System::Void btn_new_Click(System::Object^  sender, System::EventArgs^  e) {
 		QuestStruct new_quest;

@@ -2,6 +2,7 @@
 
 #include "Login.h"
 #include "LoginAdmin.h"
+#include <WinBase.h>
 
 namespace adaptive_tester {
 
@@ -11,19 +12,58 @@ namespace adaptive_tester {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::IO;
 
 	/// <summary>
 	/// Summary for StartForm
 	/// </summary>
 	public ref class StartForm : public System::Windows::Forms::Form
 	{
+	public: GlobalVars^ gv = gcnew GlobalVars();
+
+	private: String ^ path_to_ini = Path::GetDirectoryName(Application::ExecutablePath) + "\\test.ini";
 	public:
 		StartForm(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
+
+			try {
+				StreamReader^ din = File::OpenText(path_to_ini);
+				String^ delimiter_str = "=";
+				array<Char>^ delimiter = delimiter_str->ToCharArray();
+				array<String^>^ words;
+
+				String^ str;
+				int count = 0;
+				while ((str = din->ReadLine()) != nullptr)
+				{
+					words = str->Split(delimiter);
+					if (words[0] == "password")
+					{
+						gv->password = words[1];
+					}
+					else
+					{
+						TestList tl;
+						tl.test_name = words[0];
+						tl.test_path = words[1];
+						gv->test_list->Add(tl);
+					}
+				}
+				din->Close();
+			}
+			catch (Exception^ e)
+			{
+				MessageBox::Show(e->Message);
+			}
+			
+
+
+			if (gv->password == "")
+			{
+				MessageBox::Show("Password can't be found in the config file! Use default password 'test'");
+				gv->password = "test";
+			}
 		}
 
 	protected:
@@ -202,6 +242,7 @@ namespace adaptive_tester {
 			this->Name = L"StartForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Adaptive tester";
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &StartForm::StartForm_FormClosing);
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
 			this->ResumeLayout(false);
@@ -215,14 +256,31 @@ namespace adaptive_tester {
 		this->Close();
 	}
 	private: System::Void btnCreateTest_Click(System::Object^  sender, System::EventArgs^  e) {
-		Form^ loginAdmin = gcnew LoginAdmin(this);
+		Form^ loginAdmin = gcnew LoginAdmin(this, gv);
 		loginAdmin->Show();
 		this->Hide();
 		}
 	private: System::Void btnRunTest_Click(System::Object^  sender, System::EventArgs^  e) {
-		Form^ loginForm = gcnew Login(this);
+		Form^ loginForm = gcnew Login(this, gv);
 		loginForm->Show();
 		this->Hide();
+	}
+	private: System::Void StartForm_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
+		try
+		{
+			StreamWriter^ sw = gcnew StreamWriter(path_to_ini);
+			sw->WriteLine("password=" + gv->password);
+
+			for (int i = 0; i < gv->test_list->Count; i++)
+			{
+				sw->WriteLine(gv->test_list[i].test_name + "=" + gv->test_list[i].test_path);
+			}
+			sw->Close();
+		}
+		catch (Exception^ e)
+		{
+			MessageBox::Show(e->Message);
+		}
 	}
 };
 }

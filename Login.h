@@ -1,5 +1,6 @@
 #pragma once
 #include "Test.h"
+#include "QuestStruct.h"
 
 
 namespace adaptive_tester {
@@ -19,13 +20,15 @@ namespace adaptive_tester {
 
 	private: System::Collections::Generic::Dictionary<String^, String^> dict;
 	public:
-		Login(Form^ main_form)
+		Login(Form^ main_form, GlobalVars^ gv_i)
 		{
 			InitializeComponent();
 			this->main = main_form;
 
-			dict["test"] = "C:\\Users\\daft_kiD\\Desktop\\test.adt";
-			dict["sample"] = "C:\\Users\\daft_kiD\\Desktop\\sample.adt";
+			for (int i = 0; i < gv_i->test_list->Count; i++)
+			{
+				dict[gv_i->test_list[i].test_name] = gv_i->test_list[i].test_path;
+			}
 
 			for each(String^ key in dict.Keys)
 			{
