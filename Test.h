@@ -25,6 +25,7 @@ namespace adaptive_tester {
 	private: int score = 0;
 	private: Form ^ previous_form;
 	public: Generic::List<QuestStruct>^ quest_list = gcnew  Generic::List<QuestStruct>();
+	public: Generic::List<int>^ done_indexes = gcnew  Generic::List<int>();
 
 	public:
 		Test(Form^ main, String^ test_name, String^ test_path)
@@ -91,6 +92,7 @@ namespace adaptive_tester {
 			}
 		}
 	private: System::Windows::Forms::GroupBox^  quest_gb;
+	private: bool compFirst(QuestStruct first, QuestStruct second) { return first.coefficient < second.coefficient; }
 	protected:
 	private: System::Windows::Forms::RichTextBox^  rtb_quest;
 	private: System::Windows::Forms::GroupBox^  gb_answers;
@@ -254,6 +256,8 @@ namespace adaptive_tester {
 
 	private: System::Void show_question(int index)
 	{
+
+		MessageBox::Show("—ложность вопроса: " + quest_list[index].coefficient);
 		this->quest_gb->Text = "¬опрос " + (index + 1).ToString() + " из " + quest_count.ToString();
 
 		rtb_quest->Text = quest_list[index].question;
@@ -266,6 +270,10 @@ namespace adaptive_tester {
 		rb_a2->Checked = false;
 		rb_a3->Checked = false;
 		rb_a4->Checked = false;
+
+		current_quest = index;
+
+		add_item(current_quest);
 	}
 	private: System::Void btn_submit_Click(System::Object^  sender, System::EventArgs^  e) {
 		if (!(rb_a1->Checked || rb_a2->Checked || rb_a3->Checked || rb_a4->Checked))
@@ -274,30 +282,57 @@ namespace adaptive_tester {
 			return;
 		}
 
+		bool correct = false;
+
 		switch (quest_list[this->current_quest].correct_answer)
 		{
 		case 0:
-			if (rb_a1->Checked) score++;
+			if (rb_a1->Checked)
+			{
+				score++;
+				correct = true;
+			}
+
 			break;
 		case 1:
-			if (rb_a2->Checked) score++;
+			if (rb_a2->Checked) {
+				score++;
+				correct = true;
+			}
 			break;
 		case 2:
-			if (rb_a3->Checked) score++;
+			if (rb_a3->Checked) {
+				score++;
+				correct = true;
+			}
 			break;
 		case 3:
-			if (rb_a4->Checked) score++;
+			if (rb_a4->Checked) {
+				score++;
+				correct = true;
+			}
 			break;
 		}
 
-		if (++current_quest < quest_list->Count)
+		if (done_indexes->Count < quest_list->Count)
 		{
-			show_question(current_quest);
-		}	
+			int coef = quest_list[this->current_quest].coefficient;
+
+			if (correct)
+			{
+				MessageBox::Show("ќтвет правильный! »щем вопрос посложнее");
+				show_question(find_harder(coef));
+			}
+			else
+			{
+				MessageBox::Show("ќтвет Ќ≈ѕ–ј¬»Ћ№Ќџ…! »щем вопрос полегче");
+				show_question(find_easier(coef));
+			}
+		}
 		else
 		{
 			this->Close();
-		}
+		}		
 	}
 	private: System::Void btn_finish_Click(System::Object^  sender, System::EventArgs^  e) {
 		if (MessageBox::Show("¬ы уверены, что хотите закончить тест?", "¬нимание!", MessageBoxButtons::OKCancel) == System::Windows::Forms::DialogResult::OK)
@@ -309,8 +344,176 @@ namespace adaptive_tester {
 			return;
 		}
 	}
-private: System::Void Test_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
+	
+	// check if the question has already been asked
+	private: System::Boolean is_done(int index)
+	{
+		for (int j = 0; j < done_indexes->Count; j++)
+		{
+			if (index == done_indexes[j])
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
-}
+	// find the hardest question from the easier
+	private: System::Int32 find_max_from_min_not_done(int t)
+	{
+		MessageBox::Show("»щем наиболее сложный вопрос из всех, что легче предыдущего");
+
+		int max = 1;
+		int max_index = -1;
+
+		for (int i = 0; i < quest_count; i++)
+		{
+			if (!is_done(i))
+			{
+				if (quest_list[i].coefficient < t)
+				{
+					if (max < quest_list[i].coefficient)
+					{
+						max = quest_list[i].coefficient;
+						max_index = i;
+					}
+				}
+			}
+			else
+			{
+				continue;
+			}
+		}
+
+		return max_index;
+	}
+    // find the easiest question from harder
+	private: System::Int32 find_min_from_max_not_done(int t)
+	{
+		MessageBox::Show("»щем наиболее легкий вопрос из всех, что сложнее предыдущего");
+
+		int min = 15;
+		int min_index = -1;
+
+		for (int i = 0; i < quest_count; i++)
+		{
+			if (!is_done(i))
+			{
+				if (quest_list[i].coefficient > t)
+				{
+					if (min > quest_list[i].coefficient)
+					{
+						min = quest_list[i].coefficient;
+						min_index = i;
+					}
+				}
+			}
+			else
+			{
+				continue;
+			}
+		}
+		return min_index;
+	}
+
+	// find the hardest questions from all which have not been asked
+	private: System::Int32 find_max_not_done()
+	{
+		MessageBox::Show("»щем наиболее сложный вопрос из всех, что еще не были заданы, но легче предыдущего");
+		int max = 1;
+		int max_index = -1;
+
+		for (int i = 0; i < quest_count; i++)
+		{
+			if ((max < quest_list[i].coefficient) && (!is_done(i)))
+			{
+				max = quest_list[i].coefficient;
+				max_index = i;
+			}
+		}
+
+		return max_index;
+	}
+
+	// find the easiest questions from all which have not been asked
+	private: System::Int32 find_min_not_done()
+	{
+		MessageBox::Show("»щем наиболее легкий вопрос из всех, что еще не были заданы, но сложнее предыдущего");
+
+		int min = 15;
+		int min_index = -1;
+
+		for (int i = 0; i < quest_count; i++)
+		{
+			if ((min > quest_list[i].coefficient) && (!is_done(i)))
+			{
+				min = quest_list[i].coefficient;
+				min_index = i;
+			}
+		}
+
+		return min_index;
+	}
+
+	private: System::Int32 find_easier(int cur_coef)
+	{
+		int res = -1;
+
+		for (int i = 0; i < quest_count; i++)
+		{
+			if (!is_done(i))
+			{
+				res = find_max_from_min_not_done(cur_coef);
+				if (res > -1)
+				{
+					return res;
+				}
+				else
+				{
+					res = find_min_not_done();
+					return res;
+				}
+			}
+		}
+	}
+
+	private: System::Int32 find_harder(int cur_coef)
+	{
+		int res  = -1;
+
+		for (int i = 0; i < quest_count; i++)
+		{
+			if (!is_done(i))
+			{
+				res = find_min_from_max_not_done(cur_coef);
+				if (res > -1)
+				{
+					return res;
+				}
+				else
+				{
+					res = find_max_not_done();
+					return res;
+				}
+			}
+		}
+	}
+
+	private: System::Void add_item(int item)
+	{
+		for (int i = 0; i < done_indexes->Count; i++)
+		{
+			if (done_indexes[i] == item)
+			{
+				return;
+			}
+		}
+
+		done_indexes->Add(item);
+	}
+
+	private: System::Void Test_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
+
+	}
 };
 }
