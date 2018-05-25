@@ -75,6 +75,7 @@ namespace adaptive_tester {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(LoginAdmin::typeid));
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->tb_password = (gcnew System::Windows::Forms::TextBox());
 			this->rb_enter_password = (gcnew System::Windows::Forms::RadioButton());
@@ -205,6 +206,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->tb_password);
 			this->Controls->Add(this->label1);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"LoginAdmin";
 			this->Text = L"Пароль для перподавателя";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &LoginAdmin::LoginAdmin_FormClosing);

@@ -21,7 +21,7 @@ namespace adaptive_tester {
 		{
 			InitializeComponent();
 			this->l_test_name->Text = name;
-			this->l_test_score->Text = score.ToString();
+			this->l_test_score->Text = score.ToString() + " / 100";
 			this->parent = parent;
 			//
 			//TODO: Add the constructor code here
@@ -62,6 +62,7 @@ namespace adaptive_tester {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(Result::typeid));
 			this->l_test_name = (gcnew System::Windows::Forms::Label());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->l_test_score = (gcnew System::Windows::Forms::Label());
@@ -126,6 +127,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->l_test_score);
 			this->Controls->Add(this->label1);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"Result";
 			this->Text = L"Result";
 			this->ResumeLayout(false);

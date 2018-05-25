@@ -56,12 +56,10 @@ namespace adaptive_tester {
 			{
 				MessageBox::Show(e->Message);
 			}
-			
-
 
 			if (gv->password == "")
 			{
-				MessageBox::Show("Password can't be found in the config file! Use default password 'test'");
+				MessageBox::Show("Пароль не найден в файле конфигурации! Будет использован пароль 'test'");
 				gv->password = "test";
 			}
 		}
@@ -105,6 +103,7 @@ namespace adaptive_tester {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(StartForm::typeid));
 			this->btnExit = (gcnew System::Windows::Forms::Button());
 			this->btnRunTest = (gcnew System::Windows::Forms::Button());
 			this->btnCreateTest = (gcnew System::Windows::Forms::Button());
@@ -237,6 +236,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->btnCreateTest);
 			this->Controls->Add(this->menuStrip1);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->MainMenuStrip = this->menuStrip1;
 			this->MaximizeBox = false;
 			this->Name = L"StartForm";

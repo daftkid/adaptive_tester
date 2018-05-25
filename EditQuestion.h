@@ -101,6 +101,7 @@ namespace adaptive_tester {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(EditQuestion::typeid));
 			this->quest_gb = (gcnew System::Windows::Forms::GroupBox());
 			this->rtb_quest = (gcnew System::Windows::Forms::RichTextBox());
 			this->answers_gb = (gcnew System::Windows::Forms::GroupBox());
@@ -302,6 +303,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->answers_gb);
 			this->Controls->Add(this->quest_gb);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"EditQuestion";
 			this->Text = L"Редактирование вопроса";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &EditQuestion::EditQuestion_FormClosing);

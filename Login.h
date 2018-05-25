@@ -76,6 +76,7 @@ namespace adaptive_tester {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(Login::typeid));
 			this->start_testing = (gcnew System::Windows::Forms::Button());
 			this->group = (gcnew System::Windows::Forms::TextBox());
 			this->student_name = (gcnew System::Windows::Forms::TextBox());
@@ -179,6 +180,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->l_group);
 			this->Controls->Add(this->l_name);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"Login";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Login";

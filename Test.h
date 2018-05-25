@@ -21,6 +21,7 @@ namespace adaptive_tester {
 	private: String ^ path;
 	private: String ^ name;
 	private: int current_quest = 0;
+	private: int cursor = 0;
 	private: int quest_count = 0;
 	private: int score = 0;
 	private: Form ^ previous_form;
@@ -118,6 +119,7 @@ namespace adaptive_tester {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(Test::typeid));
 			this->quest_gb = (gcnew System::Windows::Forms::GroupBox());
 			this->rtb_quest = (gcnew System::Windows::Forms::RichTextBox());
 			this->gb_answers = (gcnew System::Windows::Forms::GroupBox());
@@ -238,6 +240,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->gb_answers);
 			this->Controls->Add(this->quest_gb);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"Test";
 			this->Text = L"Test";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &Test::Test_FormClosing);
@@ -256,9 +259,10 @@ namespace adaptive_tester {
 
 	private: System::Void show_question(int index)
 	{
+		cursor++;
 
 		MessageBox::Show("Сложность вопроса: " + quest_list[index].coefficient);
-		this->quest_gb->Text = "Вопрос " + (index + 1).ToString() + " из " + quest_count.ToString();
+		this->quest_gb->Text = "Вопрос " + (cursor).ToString() + " из " + quest_count.ToString();
 
 		rtb_quest->Text = quest_list[index].question;
 		rb_a1->Text = quest_list[index].first_answer;

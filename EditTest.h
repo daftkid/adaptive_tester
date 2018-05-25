@@ -24,6 +24,10 @@ namespace adaptive_tester {
 	{
 
 	private: String ^ path;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Coefficient;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Question;
+
+
 	public: Generic::List<QuestStruct>^ quest_list = gcnew  Generic::List<QuestStruct>();
 	public:
 		EditTest(String^ test_name, String^ test_path, bool is_new)
@@ -101,8 +105,8 @@ namespace adaptive_tester {
 	protected:
 
 	private: System::Windows::Forms::Label^  l_text_list;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Coefficient;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^  Question;
+
+
 	private: System::Windows::Forms::Button^  btn_edit;
 	private: System::Windows::Forms::Button^  btn_delete;
 	private: System::Windows::Forms::Button^  btn_new;
@@ -126,9 +130,8 @@ namespace adaptive_tester {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(EditTest::typeid));
 			this->dgv_list = (gcnew System::Windows::Forms::DataGridView());
-			this->Coefficient = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Question = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->l_text_list = (gcnew System::Windows::Forms::Label());
 			this->btn_edit = (gcnew System::Windows::Forms::Button());
 			this->btn_delete = (gcnew System::Windows::Forms::Button());
@@ -137,6 +140,8 @@ namespace adaptive_tester {
 			this->btn_save_test = (gcnew System::Windows::Forms::Button());
 			this->btn_save_test_as = (gcnew System::Windows::Forms::Button());
 			this->save_file_dlg = (gcnew System::Windows::Forms::SaveFileDialog());
+			this->Coefficient = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Question = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv_list))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -149,20 +154,9 @@ namespace adaptive_tester {
 			});
 			this->dgv_list->Location = System::Drawing::Point(12, 40);
 			this->dgv_list->Name = L"dgv_list";
+			this->dgv_list->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
 			this->dgv_list->Size = System::Drawing::Size(741, 150);
 			this->dgv_list->TabIndex = 0;
-			// 
-			// Coefficient
-			// 
-			this->Coefficient->HeaderText = L"Коэф";
-			this->Coefficient->Name = L"Coefficient";
-			this->Coefficient->Width = 50;
-			// 
-			// Question
-			// 
-			this->Question->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::Fill;
-			this->Question->HeaderText = L"Вопрос";
-			this->Question->Name = L"Question";
 			// 
 			// l_text_list
 			// 
@@ -237,6 +231,22 @@ namespace adaptive_tester {
 			// 
 			this->save_file_dlg->Filter = L"Adaptive Test|*.adt";
 			// 
+			// Coefficient
+			// 
+			this->Coefficient->HeaderText = L"Коэф";
+			this->Coefficient->Name = L"Coefficient";
+			this->Coefficient->ReadOnly = true;
+			this->Coefficient->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::NotSortable;
+			this->Coefficient->Width = 50;
+			// 
+			// Question
+			// 
+			this->Question->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::Fill;
+			this->Question->HeaderText = L"Вопрос";
+			this->Question->Name = L"Question";
+			this->Question->ReadOnly = true;
+			this->Question->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::NotSortable;
+			// 
 			// EditTest
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -251,6 +261,7 @@ namespace adaptive_tester {
 			this->Controls->Add(this->l_text_list);
 			this->Controls->Add(this->dgv_list);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"EditTest";
 			this->Text = L"EditTest";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv_list))->EndInit();
@@ -299,7 +310,7 @@ namespace adaptive_tester {
 		}
 		else
 		{
-			MessageBox::Show("Any questions yet! Please add new!");
+			MessageBox::Show("Ни один вопрос еще не был создан!");
 		}
 
 	}
