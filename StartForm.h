@@ -3,6 +3,7 @@
 #include "Login.h"
 #include "LoginAdmin.h"
 #include <WinBase.h>
+#include "About.h"
 
 namespace adaptive_tester {
 
@@ -20,49 +21,46 @@ namespace adaptive_tester {
 	public ref class StartForm : public System::Windows::Forms::Form
 	{
 	public: GlobalVars^ gv = gcnew GlobalVars();
+	private: System::Windows::Forms::SaveFileDialog^  save_dlg;
+	public:
 
 	private: String ^ path_to_ini = Path::GetDirectoryName(Application::ExecutablePath) + "\\test.ini";
-	public:
-		StartForm(void)
-		{
-			InitializeComponent();
+	public: StartForm(void)
+	{
+		InitializeComponent();
 
-			try {
-				StreamReader^ din = File::OpenText(path_to_ini);
-				String^ delimiter_str = "=";
-				array<Char>^ delimiter = delimiter_str->ToCharArray();
-				array<String^>^ words;
+		try {
+			gv->password = "";
+			StreamReader^ din = File::OpenText(path_to_ini);
+			String^ delimiter_str = "=";
+			array<Char>^ delimiter = delimiter_str->ToCharArray();
+			array<String^>^ words;
 
-				String^ str;
-				int count = 0;
-				while ((str = din->ReadLine()) != nullptr)
+			String^ str;
+			int count = 0;
+			while ((str = din->ReadLine()) != nullptr)
+			{
+				words = str->Split(delimiter);
+				if (words[0] == "password")
 				{
-					words = str->Split(delimiter);
-					if (words[0] == "password")
-					{
-						gv->password = words[1];
-					}
-					else
-					{
-						TestList tl;
-						tl.test_name = words[0];
-						tl.test_path = words[1];
-						gv->test_list->Add(tl);
-					}
+					gv->password = words[1];
 				}
-				din->Close();
+				else
+				{
+					TestList tl;
+					tl.test_name = words[0];
+					tl.test_path = words[1];
+					gv->test_list->Add(tl);
+				}
 			}
-			catch (Exception^ e)
-			{
-				MessageBox::Show(e->Message);
-			}
+			din->Close();
 
-			if (gv->password == "")
-			{
-				MessageBox::Show("Пароль не найден в файле конфигурации! Будет использован пароль 'test'");
-				gv->password = "test";
-			}
 		}
+		catch (Exception^ e)
+		{
+			MessageBox::Show("Похоже, что Вы в первый раз запускаете приложение, так как INI файл не был найден. Данный файл будет записан после выхода из приложения!");
+		}
+	}
 
 	protected:
 		/// <summary>
@@ -117,6 +115,7 @@ namespace adaptive_tester {
 			this->help_ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->manua_lToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->about_ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->save_dlg = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -219,12 +218,18 @@ namespace adaptive_tester {
 			this->manua_lToolStripMenuItem->Name = L"manua_lToolStripMenuItem";
 			this->manua_lToolStripMenuItem->Size = System::Drawing::Size(221, 22);
 			this->manua_lToolStripMenuItem->Text = L"Руководство пользователя";
+			this->manua_lToolStripMenuItem->Click += gcnew System::EventHandler(this, &StartForm::manua_lToolStripMenuItem_Click);
 			// 
 			// about_ToolStripMenuItem
 			// 
 			this->about_ToolStripMenuItem->Name = L"about_ToolStripMenuItem";
 			this->about_ToolStripMenuItem->Size = System::Drawing::Size(221, 22);
 			this->about_ToolStripMenuItem->Text = L"О программе";
+			this->about_ToolStripMenuItem->Click += gcnew System::EventHandler(this, &StartForm::about_ToolStripMenuItem_Click);
+			// 
+			// save_dlg
+			// 
+			this->save_dlg->Filter = L"DOCX |*.docx";
 			// 
 			// StartForm
 			// 
@@ -262,8 +267,7 @@ namespace adaptive_tester {
 		}
 	private: System::Void btnRunTest_Click(System::Object^  sender, System::EventArgs^  e) {
 		Form^ loginForm = gcnew Login(this, gv);
-		loginForm->Show();
-		this->Hide();
+		//this->Hide();
 	}
 	private: System::Void StartForm_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
 		try
@@ -278,6 +282,29 @@ namespace adaptive_tester {
 			sw->Close();
 		}
 		catch (Exception^ e)
+		{
+			MessageBox::Show(e->Message);
+		}
+	}
+	private: System::Void about_ToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		Form^ about = gcnew About();
+		about->ShowDialog();
+	}
+	private: System::Void manua_lToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		try
+		{
+			System::Net::WebClient ^webClient = gcnew System::Net::WebClient();
+			String^ _URL = "https://drive.google.com/uc?authuser=0&id=1ddOIoWDrjmQaUTatTFkRwFd_mpd8pw8x&export=download";
+
+			this->save_dlg->ShowDialog();
+
+			if (save_dlg->FileName != "")
+			{
+				webClient->DownloadFile(_URL, save_dlg->FileName);
+			}
+			delete webClient;
+		}
+		catch (System::Exception^ e)
 		{
 			MessageBox::Show(e->Message);
 		}

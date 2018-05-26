@@ -93,6 +93,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="About.cpp" />
     <ClCompile Include="adaptive_tester.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="ChooseTest.cpp" />
@@ -109,6 +110,9 @@
     <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="About.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="ChooseTest.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -141,6 +145,9 @@
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="About.resx">
+      <DependentUpon>About.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ChooseTest.resx">
       <DependentUpon>ChooseTest.h</DependentUpon>
     </EmbeddedResource>

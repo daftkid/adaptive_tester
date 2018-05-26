@@ -18,45 +18,44 @@ namespace adaptive_tester {
 	{
 
 	public: QuestStruct question;
-	public:
-		EditQuestion(QuestStruct q)
+	public:	EditQuestion(QuestStruct q)
+	{
+		InitializeComponent();
+		this->question = q;
+
+		this->rtb_quest->Text = question.question;
+		this->tb_answer_1->Text = question.first_answer;
+		this->tb_answer_2->Text = question.second_answer;
+		this->tb_answer_3->Text = question.third_answer;
+		this->tb_answer_4->Text = question.fourth_answer;
+
+		if (question.coefficient == 0)
 		{
-			InitializeComponent();
-			this->question = q;
-
-			this->rtb_quest->Text = question.question;
-			this->tb_answer_1->Text = question.first_answer;
-			this->tb_answer_2->Text = question.second_answer;
-			this->tb_answer_3->Text = question.third_answer;
-			this->tb_answer_4->Text = question.fourth_answer;
-
-			if (question.coefficient == 0)
-			{
-				this->nud_koef->Value = 1;
-			}
-			else
-			{
-				this->nud_koef->Value = question.coefficient;
-			}			
-
-			switch (this->question.correct_answer)
-			{
-				case 0:
-					rb_answer_1->Checked = true;
-					break;
-				case 1:
-					rb_answer_2->Checked = true;
-					break;
-				case 2:
-					rb_answer_3->Checked = true;
-					break;
-				case 3:
-					rb_answer_4->Checked = true;
-					break;
-				default:
-					break;
-			}
+			this->nud_koef->Value = 1;
 		}
+		else
+		{
+			this->nud_koef->Value = question.coefficient;
+		}			
+
+		switch (this->question.correct_answer)
+		{
+			case 0:
+				rb_answer_1->Checked = true;
+				break;
+			case 1:
+				rb_answer_2->Checked = true;
+				break;
+			case 2:
+				rb_answer_3->Checked = true;
+				break;
+			case 3:
+				rb_answer_4->Checked = true;
+				break;
+			default:
+				break;
+		}
+	}
 
 	protected:
 		/// <summary>
@@ -306,7 +305,6 @@ namespace adaptive_tester {
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"EditQuestion";
 			this->Text = L"Редактирование вопроса";
-			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &EditQuestion::EditQuestion_FormClosing);
 			this->quest_gb->ResumeLayout(false);
 			this->answers_gb->ResumeLayout(false);
 			this->answers_gb->PerformLayout();
@@ -374,10 +372,20 @@ namespace adaptive_tester {
 		}
 
 		String ^ str = "";
+		int k = 0;
 
 		for each (String^ str_in in rtb_quest->Lines)
 		{
-			str = str + " " + str_in;
+			if (k > 0)
+			{
+				str = str + " " + str_in;
+			}	
+
+			if (k == 0)
+			{
+				str = str_in + " ";
+				k++;
+			}
 		}
 
 		question.question = str;
@@ -406,8 +414,6 @@ namespace adaptive_tester {
 		}
 
 		this->Close();
-	}
-	private: System::Void EditQuestion_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
 	}
 };
 }

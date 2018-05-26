@@ -20,18 +20,17 @@ namespace adaptive_tester {
 	/// </summary>
 	public ref class ChooseTest : public System::Windows::Forms::Form
 	{
-	public:
-		ChooseTest(GlobalVars^ gv_i)
+	public: ChooseTest(GlobalVars^ gv_i)
+	{
+		InitializeComponent();
+
+		this->gv = gv_i;
+
+		for (int i = 0; i < gv->test_list->Count; i++)
 		{
-			InitializeComponent();
-
-			this->gv = gv_i;
-
-			for (int i = 0; i < gv->test_list->Count; i++)
-			{
-				this->dgv_test_list->Rows->Add(gv->test_list[i].test_name, gv->test_list[i].test_path);
-			}			
-		}
+			this->dgv_test_list->Rows->Add(gv->test_list[i].test_name, gv->test_list[i].test_path);
+		}			
+	}
 
 	protected:
 		/// <summary>
@@ -86,6 +85,8 @@ namespace adaptive_tester {
 		{
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(ChooseTest::typeid));
 			this->dgv_test_list = (gcnew System::Windows::Forms::DataGridView());
+			this->TestName = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->TestPath = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->l_text_list = (gcnew System::Windows::Forms::Label());
 			this->gb_add_test = (gcnew System::Windows::Forms::GroupBox());
 			this->btn_new_test = (gcnew System::Windows::Forms::Button());
@@ -101,8 +102,6 @@ namespace adaptive_tester {
 			this->btn_delete_test = (gcnew System::Windows::Forms::Button());
 			this->openTestDlg = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->back_to_start = (gcnew System::Windows::Forms::Button());
-			this->TestName = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->TestPath = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv_test_list))->BeginInit();
 			this->gb_add_test->SuspendLayout();
 			this->gb_delete_test->SuspendLayout();
@@ -126,6 +125,24 @@ namespace adaptive_tester {
 			this->dgv_test_list->Size = System::Drawing::Size(606, 150);
 			this->dgv_test_list->TabIndex = 0;
 			this->dgv_test_list->RowEnter += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &ChooseTest::dataGridView1_RowEnter);
+			// 
+			// TestName
+			// 
+			this->TestName->HeaderText = L"Название теста";
+			this->TestName->Name = L"TestName";
+			this->TestName->ReadOnly = true;
+			this->TestName->Resizable = System::Windows::Forms::DataGridViewTriState::False;
+			this->TestName->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::NotSortable;
+			this->TestName->Width = 200;
+			// 
+			// TestPath
+			// 
+			this->TestPath->HeaderText = L"Путь к файлу теста";
+			this->TestPath->Name = L"TestPath";
+			this->TestPath->ReadOnly = true;
+			this->TestPath->Resizable = System::Windows::Forms::DataGridViewTriState::False;
+			this->TestPath->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::NotSortable;
+			this->TestPath->Width = 350;
 			// 
 			// l_text_list
 			// 
@@ -155,7 +172,6 @@ namespace adaptive_tester {
 			// 
 			// btn_new_test
 			// 
-			this->btn_new_test->Enabled = false;
 			this->btn_new_test->Location = System::Drawing::Point(166, 78);
 			this->btn_new_test->Name = L"btn_new_test";
 			this->btn_new_test->Size = System::Drawing::Size(75, 23);
@@ -166,7 +182,6 @@ namespace adaptive_tester {
 			// 
 			// btn_add_test
 			// 
-			this->btn_add_test->Enabled = false;
 			this->btn_add_test->Location = System::Drawing::Point(328, 78);
 			this->btn_add_test->Name = L"btn_add_test";
 			this->btn_add_test->Size = System::Drawing::Size(75, 23);
@@ -177,7 +192,6 @@ namespace adaptive_tester {
 			// 
 			// btn_clear_test
 			// 
-			this->btn_clear_test->Enabled = false;
 			this->btn_clear_test->Location = System::Drawing::Point(247, 78);
 			this->btn_clear_test->Name = L"btn_clear_test";
 			this->btn_clear_test->Size = System::Drawing::Size(75, 23);
@@ -278,24 +292,6 @@ namespace adaptive_tester {
 			this->back_to_start->UseVisualStyleBackColor = true;
 			this->back_to_start->Click += gcnew System::EventHandler(this, &ChooseTest::back_to_start_Click);
 			// 
-			// TestName
-			// 
-			this->TestName->HeaderText = L"Название теста";
-			this->TestName->Name = L"TestName";
-			this->TestName->ReadOnly = true;
-			this->TestName->Resizable = System::Windows::Forms::DataGridViewTriState::False;
-			this->TestName->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::NotSortable;
-			this->TestName->Width = 200;
-			// 
-			// TestPath
-			// 
-			this->TestPath->HeaderText = L"Путь к файлу теста";
-			this->TestPath->Name = L"TestPath";
-			this->TestPath->ReadOnly = true;
-			this->TestPath->Resizable = System::Windows::Forms::DataGridViewTriState::False;
-			this->TestPath->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::NotSortable;
-			this->TestPath->Width = 350;
-			// 
 			// ChooseTest
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -309,7 +305,7 @@ namespace adaptive_tester {
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"ChooseTest";
-			this->Text = L"ChooseTest";
+			this->Text = L"Файлы тестов";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &ChooseTest::ChooseTest_FormClosing);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv_test_list))->EndInit();
 			this->gb_add_test->ResumeLayout(false);
@@ -355,6 +351,7 @@ namespace adaptive_tester {
 		if (this->tb_title->Text == "")
 		{
 			MessageBox::Show("Введите название теста!");
+			tb_title->Focus();
 			return;
 		}
 		else
@@ -390,9 +387,18 @@ namespace adaptive_tester {
 		try
 		{
 			this->dgv_test_list->Rows->Add(tb_title->Text, tb_path->Text);
+
+			TestList temp;
+			temp.test_name = tb_title->Text;
+			temp.test_path = tb_path->Text;
+
+			this->gv->test_list->Add(temp);
+
 			this->tb_path->Clear();
 			this->tb_title->Clear();
 			this->dgv_test_list->CommitEdit(DataGridViewDataErrorContexts::Commit);
+
+
 		}
 		catch (Exception^ e)
 		{
@@ -404,16 +410,31 @@ namespace adaptive_tester {
 		this->Close();
 	}
 	private: System::Void btn_edit_test_Click(System::Object^  sender, System::EventArgs^  e) {
-		String^ test_name = this->dgv_test_list->CurrentRow->Cells["TestName"]->Value->ToString();
-		String^ test_path = this->dgv_test_list->CurrentRow->Cells["TestPath"]->Value->ToString();
+		if (dgv_test_list->RowCount > 1)
+		{
+			String^ test_name = this->dgv_test_list->CurrentRow->Cells["TestName"]->Value->ToString();
+			String^ test_path = this->dgv_test_list->CurrentRow->Cells["TestPath"]->Value->ToString();
 
-		Form^ editForm = gcnew EditTest(test_name, test_path, false);
-		editForm->Show();
+			Form^ editForm = gcnew EditTest(test_name, test_path, false);
+		}
+		else
+		{
+			MessageBox::Show("Нечего Редактировать! Ни один тест еще не был добавлен!");
+		}
 	}
-private: System::Void btn_new_test_Click(System::Object^  sender, System::EventArgs^  e) {
-	Form^ editForm = gcnew EditTest(tb_title->Text, "", true);
-	editForm->Show();
-}
+	private: System::Void btn_new_test_Click(System::Object^  sender, System::EventArgs^  e) {
+		if (this->tb_title->Text == "")
+		{
+			MessageBox::Show("Введите название теста!");
+			tb_title->Focus();
+			return;
+		}
+		else
+		{
+			Form^ editForm = gcnew EditTest(tb_title->Text, "", true);
+			editForm->ShowDialog();
+		}
+	}
 	private: System::Void ChooseTest_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
 		gv->test_list->Clear();
 
@@ -445,7 +466,7 @@ private: System::Void btn_new_test_Click(System::Object^  sender, System::EventA
 		}
 		else
 		{
-			MessageBox::Show("Any questions yet! Please add new!");
+			MessageBox::Show("Нечего удалять! Ни один тест еще не был добавлен!");
 		}
 	}
 };

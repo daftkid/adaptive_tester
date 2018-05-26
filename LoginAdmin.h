@@ -32,6 +32,13 @@ namespace adaptive_tester {
 			this->tb_password->Focus();
 			this->gv = gv;
 			this->password = this->gv->password;
+
+			if (this->password == "")
+			{
+				MessageBox::Show("Пароль не найден в файле конфигурации! Будет использован пароль 'test'! Измените пароль!");
+				this->password = "test";
+				this->rb_change_password->Checked = true;
+			}
 		}
 
 	protected:
@@ -96,7 +103,6 @@ namespace adaptive_tester {
 			this->label1->Size = System::Drawing::Size(48, 13);
 			this->label1->TabIndex = 0;
 			this->label1->Text = L"Пароль:";
-			this->label1->Click += gcnew System::EventHandler(this, &LoginAdmin::label1_Click);
 			// 
 			// tb_password
 			// 
@@ -210,14 +216,11 @@ namespace adaptive_tester {
 			this->Name = L"LoginAdmin";
 			this->Text = L"Пароль для перподавателя";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &LoginAdmin::LoginAdmin_FormClosing);
-			this->Load += gcnew System::EventHandler(this, &LoginAdmin::LoginAdmin_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
 		}
 #pragma endregion
-	private: System::Void label1_Click(System::Object^  sender, System::EventArgs^  e) {
-	}
 	private: System::Void rb_enter_password_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
 		this->tb_password->Enabled = true;
 		this->btn_go->Text = "Продолжить";
@@ -260,6 +263,12 @@ namespace adaptive_tester {
 		if (this->rb_enter_password->Checked)
 		{
 			if (!checkPassword(this->tb_password->Text)) return;
+
+			Form^ chooseTest = gcnew ChooseTest(gv);
+			this->Hide();
+			chooseTest->ShowDialog();
+			this->Close();
+			//tb_password->Clear();
 		}
 		else
 		{
@@ -273,16 +282,14 @@ namespace adaptive_tester {
 				if (!checkPassword(this->tb_old_password->Text)) return;
 				this->password = tb_new_password->Text;
 				gv->password = tb_new_password->Text;
+
+				MessageBox::Show("Пароль был успешно изменен!");
+
+				tb_new_password->Clear();
+				tb_old_password->Clear();
+				rb_enter_password->Checked = true;
 			}
 		}
-
-		Form^ chooseTest = gcnew ChooseTest(gv);
-		this->Hide();
-		chooseTest->ShowDialog();
-		this->Show();
-
-	}
-	private: System::Void LoginAdmin_Load(System::Object^  sender, System::EventArgs^  e) {
 	}
 
 	private: System::Boolean checkPassword(String^ in_password)

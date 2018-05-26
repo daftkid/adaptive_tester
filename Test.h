@@ -24,7 +24,7 @@ namespace adaptive_tester {
 	private: int cursor = 0;
 	private: int quest_count = 0;
 	private: int score = 0;
-	private: Form ^ previous_form;
+	private: Form ^ main_form;
 	public: Generic::List<QuestStruct>^ quest_list = gcnew  Generic::List<QuestStruct>();
 	public: Generic::List<int>^ done_indexes = gcnew  Generic::List<int>();
 
@@ -32,7 +32,7 @@ namespace adaptive_tester {
 		Test(Form^ main, String^ test_name, String^ test_path)
 		{
 			InitializeComponent();
-			this->previous_form = main;
+			this->main_form = main;
 			this->name = test_name;
 			this->path = test_path;
 
@@ -79,6 +79,9 @@ namespace adaptive_tester {
 			this->quest_count = quest_list->Count;
 
 			show_question(0);
+			this->main_form->Hide();
+			this->Show();
+	
 		}
 
 	protected:
@@ -93,7 +96,6 @@ namespace adaptive_tester {
 			}
 		}
 	private: System::Windows::Forms::GroupBox^  quest_gb;
-	private: bool compFirst(QuestStruct first, QuestStruct second) { return first.coefficient < second.coefficient; }
 	protected:
 	private: System::Windows::Forms::RichTextBox^  rtb_quest;
 	private: System::Windows::Forms::GroupBox^  gb_answers;
@@ -244,7 +246,6 @@ namespace adaptive_tester {
 			this->Name = L"Test";
 			this->Text = L"Test";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &Test::Test_FormClosing);
-			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &Test::Test_FormClosed);
 			this->quest_gb->ResumeLayout(false);
 			this->gb_answers->ResumeLayout(false);
 			this->gb_answers->PerformLayout();
@@ -253,7 +254,7 @@ namespace adaptive_tester {
 		}
 #pragma endregion
 	private: System::Void Test_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
-		Form ^ result = gcnew Result(this->previous_form, this->name, int(Math::Round((float(this->score) / float(this->quest_count))*100.0)));
+		Form ^ result = gcnew Result(this->main_form, this->name, int(Math::Round((float(this->score) / float(this->quest_count))*100.0)));
 		result->Show();
 	}
 
@@ -514,10 +515,6 @@ namespace adaptive_tester {
 		}
 
 		done_indexes->Add(item);
-	}
-
-	private: System::Void Test_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
-
 	}
 };
 }

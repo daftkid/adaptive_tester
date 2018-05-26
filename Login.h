@@ -10,6 +10,7 @@ namespace adaptive_tester {
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
+	using namespace System::IO;
 	using namespace System::Drawing;
 
 	/// <summary>
@@ -25,16 +26,26 @@ namespace adaptive_tester {
 			InitializeComponent();
 			this->main = main_form;
 
-			for (int i = 0; i < gv_i->test_list->Count; i++)
+			if (gv_i->test_list->Count == 0)
 			{
-				dict[gv_i->test_list[i].test_name] = gv_i->test_list[i].test_path;
+				MessageBox::Show("Ни один тест еще не был добавлен! Свяжитесь с преподавателем!");
+				this->Close();
 			}
+			else
+			{
+				for (int i = 0; i < gv_i->test_list->Count; i++)
+				{
+					dict[gv_i->test_list[i].test_name] = gv_i->test_list[i].test_path;
+				}
 
-			for each(String^ key in dict.Keys)
-			{
-				this->comboBox1->Items->Add(key);
+				for each(String^ key in dict.Keys)
+				{
+					this->comboBox1->Items->Add(key);
+				}
+				this->comboBox1->Text = this->comboBox1->Items[0]->ToString();
+				this->main->Hide();
+				this->Show();
 			}
-			this->comboBox1->Text = this->comboBox1->Items[0]->ToString();
 		}
 
 	protected:
@@ -183,7 +194,8 @@ namespace adaptive_tester {
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"Login";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"Login";
+			this->Text = L"Начать тест";
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &Login::Login_FormClosing);
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &Login::Login_FormClosed);
 			this->ResumeLayout(false);
 			this->PerformLayout();
@@ -214,10 +226,22 @@ namespace adaptive_tester {
 		}
 		else
 		{
-			Form^ test = gcnew Test(this, this->comboBox1->Text, dict[this->comboBox1->Text]);
-			this->Hide();
-			test->Show();
+			try
+			{
+				StreamReader^ din = File::OpenText(dict[this->comboBox1->Text]);
+				din->Close();
+				Form^ test = gcnew Test(this->main, this->comboBox1->Text, dict[this->comboBox1->Text]);
+				this->Hide();
+			}
+			catch (System::IO::FileNotFoundException^ e)
+			{
+				MessageBox::Show("Файл с выбранным тестом не был найден! Обратитесь к преподавателю!");
+			}
+			
 		}
+	}
+	private: System::Void Login_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
+		this->main->Show();
 	}
 };
 }

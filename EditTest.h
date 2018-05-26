@@ -29,17 +29,18 @@ namespace adaptive_tester {
 
 
 	public: Generic::List<QuestStruct>^ quest_list = gcnew  Generic::List<QuestStruct>();
-	public:
-		EditTest(String^ test_name, String^ test_path, bool is_new)
-		{
-			InitializeComponent();
-			this->path = test_path;
+	public: EditTest(String^ test_name, String^ test_path, bool is_new)
+	{
+		InitializeComponent();
+		this->path = test_path;
 
-			if (is_new)
-			{
-				btn_save_test->Enabled = false;
-			}
-			else
+		if (is_new)
+		{
+			btn_save_test->Enabled = false;
+		}
+		else
+		{
+			try
 			{
 				StreamReader^ din = File::OpenText(this->path);
 				String^ delimiter_str = "|";
@@ -87,8 +88,17 @@ namespace adaptive_tester {
 
 					this->dgv_list->Rows->Add(quest.coefficient, quest.question);
 				}
+
+				this->ShowDialog();
 			}
+			catch (System::IO::FileNotFoundException^ e)
+			{
+				MessageBox::Show("К сожалению, файл по указанному пути не существует!");
+				this->Close();
+			}
+			
 		}
+	}
 
 	protected:
 		/// <summary>
@@ -132,6 +142,8 @@ namespace adaptive_tester {
 		{
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(EditTest::typeid));
 			this->dgv_list = (gcnew System::Windows::Forms::DataGridView());
+			this->Coefficient = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Question = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->l_text_list = (gcnew System::Windows::Forms::Label());
 			this->btn_edit = (gcnew System::Windows::Forms::Button());
 			this->btn_delete = (gcnew System::Windows::Forms::Button());
@@ -140,8 +152,6 @@ namespace adaptive_tester {
 			this->btn_save_test = (gcnew System::Windows::Forms::Button());
 			this->btn_save_test_as = (gcnew System::Windows::Forms::Button());
 			this->save_file_dlg = (gcnew System::Windows::Forms::SaveFileDialog());
-			this->Coefficient = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Question = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv_list))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -157,6 +167,22 @@ namespace adaptive_tester {
 			this->dgv_list->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
 			this->dgv_list->Size = System::Drawing::Size(741, 150);
 			this->dgv_list->TabIndex = 0;
+			// 
+			// Coefficient
+			// 
+			this->Coefficient->HeaderText = L"Коэф";
+			this->Coefficient->Name = L"Coefficient";
+			this->Coefficient->ReadOnly = true;
+			this->Coefficient->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::NotSortable;
+			this->Coefficient->Width = 50;
+			// 
+			// Question
+			// 
+			this->Question->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::Fill;
+			this->Question->HeaderText = L"Вопрос";
+			this->Question->Name = L"Question";
+			this->Question->ReadOnly = true;
+			this->Question->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::NotSortable;
 			// 
 			// l_text_list
 			// 
@@ -231,22 +257,6 @@ namespace adaptive_tester {
 			// 
 			this->save_file_dlg->Filter = L"Adaptive Test|*.adt";
 			// 
-			// Coefficient
-			// 
-			this->Coefficient->HeaderText = L"Коэф";
-			this->Coefficient->Name = L"Coefficient";
-			this->Coefficient->ReadOnly = true;
-			this->Coefficient->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::NotSortable;
-			this->Coefficient->Width = 50;
-			// 
-			// Question
-			// 
-			this->Question->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::Fill;
-			this->Question->HeaderText = L"Вопрос";
-			this->Question->Name = L"Question";
-			this->Question->ReadOnly = true;
-			this->Question->SortMode = System::Windows::Forms::DataGridViewColumnSortMode::NotSortable;
-			// 
 			// EditTest
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -263,7 +273,7 @@ namespace adaptive_tester {
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"EditTest";
-			this->Text = L"EditTest";
+			this->Text = L"Редактировать тест";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv_list))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
@@ -304,9 +314,13 @@ namespace adaptive_tester {
 	private: System::Void btn_delete_Click(System::Object^  sender, System::EventArgs^  e) {
 		if (dgv_list->RowCount > 1)
 		{
-			quest_list->RemoveAt(dgv_list->CurrentRow->Index);
-			refresh_test();
-			this->dgv_list->CurrentCell = this->dgv_list->Rows[this->dgv_list->Rows->Count - 2]->Cells[0];
+			try
+			{
+				quest_list->RemoveAt(dgv_list->CurrentRow->Index);
+				refresh_test();
+				this->dgv_list->CurrentCell = this->dgv_list->Rows[this->dgv_list->Rows->Count - 2]->Cells[0];
+			}
+			catch (Exception^ e) {}
 		}
 		else
 		{
