@@ -232,6 +232,12 @@ namespace adaptive_tester {
 				din->Close();
 				Form^ test = gcnew Test(this->main, this->comboBox1->Text, dict[this->comboBox1->Text]);
 				this->Hide();
+
+				StreamWriter^ sw = gcnew StreamWriter(Path::GetDirectoryName(Application::ExecutablePath) + "\\log.txt", true);
+				DateTime cpCurrentDateTime = DateTime::Now;
+				String^ strTemp = cpCurrentDateTime.ToString();
+				sw->WriteLine(strTemp +  " [Test started] User: " + this->student_name->Text + "  Group: " + this->group->Text);
+				sw->Close();
 			}
 			catch (System::IO::FileNotFoundException^ e)
 			{

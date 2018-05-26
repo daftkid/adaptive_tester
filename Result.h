@@ -8,6 +8,7 @@ namespace adaptive_tester {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::IO;
 
 	/// <summary>
 	/// Summary for Result
@@ -22,6 +23,14 @@ namespace adaptive_tester {
 			InitializeComponent();
 			this->l_test_name->Text = name;
 			this->l_test_score->Text = score.ToString() + " / 100";
+
+			StreamWriter^ sw = gcnew StreamWriter(Path::GetDirectoryName(Application::ExecutablePath) + "\\log.txt", true);
+			DateTime cpCurrentDateTime = DateTime::Now;
+			String^ strTemp = cpCurrentDateTime.ToString();
+			sw->WriteLine(strTemp + " [Test passed] Result:" + score.ToString());
+
+			sw->Close();
+
 			this->parent = parent;
 			//
 			//TODO: Add the constructor code here
@@ -137,6 +146,9 @@ namespace adaptive_tester {
 #pragma endregion
 	private: System::Void btn_close_Click(System::Object^  sender, System::EventArgs^  e) {
 		this->Hide();
+
+		// write results to file
+
 		this->parent->Show();
 		this->Close();
 	}
